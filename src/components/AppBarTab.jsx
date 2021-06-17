@@ -1,5 +1,5 @@
 import React from 'react';
-import {Pressable, StyleSheet, View} from 'react-native';
+import {Pressable, StyleSheet, View, Button} from 'react-native';
 import Constants from 'expo-constants';
 import Text from './Text';
 import theme from '../theme';

@@ -8,17 +8,29 @@ const styles = StyleSheet.create({
       display: 'flex',
       paddingTop: Constants.statusBarHeight,
       backgroundColor: 'white',
-      paddingBottom: Constants.statusBarHeight
+      paddingBottom: Constants.statusBarHeight,
+      marginBottom: 25
     },
     info: {
         display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'stretch',
-        marginHorizontal: 50
-      },
+        marginHorizontal: 50,
+    },
+    row: {
+      display: 'flex',
+      marginHorizontal: 50
+    },
+    col: {
+      flex: 1
+    },
+    colBold: {
+      flex: 1,
+      marginVertical: Constants.statusBarHeight,
+      fontWeight: 'bold'
+    },
     flexItemA: {
         flexGrow: 0,
-        paddingHorizontal: Constants.statusBarHeight
+        paddingHorizontal: Constants.statusBarHeight,
+        fontWeight: 'bold'
     },
     header: {
         display: 'flex',
@@ -26,7 +38,8 @@ const styles = StyleSheet.create({
         alignItems: 'flex-start'
     },
       flexItemB: {
-        flexGrow: 1,
+        flexGrow: 0,
+        paddingHorizontal: Constants.statusBarHeight,
       },
     logo: {
         flexGrow: 0,
@@ -49,9 +62,6 @@ const styles = StyleSheet.create({
           alignSelf: 'center',
           justifyContent: 'center'
       },
-      bold: {
-        fontWeight: 'bold'
-      }
 
     // ...
   });
@@ -70,34 +80,19 @@ const RepositoryItem = (props) => {
             </View>
             <View style={styles.button}><Button style={styles.button} title={props.repo.item.language}></Button></View>
             <Text style={styles.info} key={props.repo.item.id}>
-                <Text style={styles.flexItemA}><Text style={styles.bold}>Stars</Text>
+                <Text style={styles.colBold}>Stars  </Text>
+                <Text style={styles.colBold}>Forks  </Text>
+                <Text style={styles.colBold}>Reviews  </Text>
+                <Text style={styles.colBold}>Rating </Text>
                 {'\n'}
-                {'\n'}
-                {props.repo.item.stargazersCount}
-                {'\n'}
-                </Text>
-                <Text style={styles.flexItemA}>
-                <Text style={styles.bold}>Forks</Text>
-                {'\n'}
-                {'\n'}
-                {props.repo.item.forksCount}
-                {'\n'}
-                </Text>
-                <Text style={styles.flexItemA}>
-                  <Text style={styles.bold}>Reviews</Text>
-                {'\n'}
-                {'\n'}
-                {props.repo.item.reviewCount}
-                {'\n'}
-                </Text>
-                <Text style={styles.flexItemA}>
-                <Text style={styles.bold}>Rating</Text>
-                {'\n'}
-                {'\n'}
-                {props.repo.item.ratingAverage} 
-                {'\n'}
-                </Text>
             </Text>
+            <Text style={styles.row}>  
+                <Text style={styles.col}>{props.repo.item.stargazersCount}   </Text>
+                <Text style={styles.col}>{props.repo.item.forksCount}   </Text>
+                <Text style={styles.col}>{props.repo.item.reviewCount}   </Text>
+                <Text style={styles.col}>{props.repo.item.ratingAverage}   </Text>
+            </Text>
+
             
         </View>);
 };

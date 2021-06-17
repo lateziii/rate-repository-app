@@ -3,8 +3,7 @@ import {View, Pressable, Button, StyleSheet} from 'react-native';
 import FormikTextInput from './FormikTextInput';
 import {Formik} from 'formik';
 import * as yup from 'yup';
-
-import Text from './Text';
+import useSignIn from '../hooks/useSignIn';
 
 const initialValues = {
     username: '',
@@ -25,8 +24,17 @@ const styles = StyleSheet.create({
   });
 
 const SignIn = () => {
-    const onSubmit = (values) => {
-        console.log(values);
+    const [signIn] = useSignIn();
+    const onSubmit = async (values) => {
+        const { username, password } = values;
+        try {
+            const {data} = await signIn({ username, password });
+            console.log(data);
+
+        } catch (e) {
+            console.log(e);
+        }
+
     };
   return (
 
@@ -34,9 +42,9 @@ const SignIn = () => {
               {({ handleSubmit }) =>
                 <View style={styles.inputContainer}> 
                     <FormikTextInput name="username" placeholder="Username" />
-                    <FormikTextInput name="password" placeholder="Password"/>
-                    <Pressable style={{zIndex: 0.5, }} onPress={handleSubmit}>
-                        <Button title='Login'/>
+                    <FormikTextInput name="password" placeholder="Password" secureTextEntry/>
+                    <Pressable style={{zIndex: 0.5, }}>
+                        <Button onPress={handleSubmit} title='Login'/>
                     </Pressable>
                 </View>
                  }
