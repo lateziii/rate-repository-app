@@ -9,9 +9,16 @@ const styles = StyleSheet.create({
     container: {
         paddingHorizontal: Constants.statusBarHeight,
         backgroundColor: '#21292e',
-        borderRightWidth: 1,
-        borderLeftWidth: 1,
-        borderColor: theme.colors.nav,
+      },
+      tabContainer: {
+        paddingHorizontal: 15,
+        paddingVertical: 20,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+      },
+      tab: {
+        flexGrow: 0
       },
   text: {
     color: theme.colors.nav
@@ -21,11 +28,11 @@ const styles = StyleSheet.create({
 const AppBarTab = (props) => {
 
     return(
-        <View>
-            <Pressable style={styles.container}>
-                <View><Link to={props.link}><Text style={styles.text}>{props.title}</Text></Link></View>
-            </Pressable>
+      <Pressable style={styles.tab} onPress={props.onPress}>
+        <View style={styles.tabContainer}>
+          <Link to={props.link}><Text style={styles.text}>{props.title}</Text></Link>
         </View>
+      </Pressable>
     );
 };
 

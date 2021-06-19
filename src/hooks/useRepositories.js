@@ -1,21 +1,48 @@
-import { useState, useEffect } from 'react';
 import { useQuery } from '@apollo/client';
 import { GET_REPOS } from '../graphql/queries';
-
-const useRepositories = () => {
-  const [repositories, setRepositories] = useState([]);
+import { useDebounce } from 'use-debounce';
 
 
-    const { data, error, loading } = useQuery(GET_REPOS, {
+const useRepositories = ({order, searchQuery, first}) => {
+    const [searchValue] = useDebounce(searchQuery, 500);
+    const findOrder = (order) => {
+        switch (order) {
+          case 'latest': {
+            return { orderBy: 'CREATED_AT', orderDirection: 'DESC' };
+          }
+          case 'highest': {
+            return { orderBy: 'RATING_AVERAGE', orderDirection: 'DESC' };
+          }
+          case 'lowest': {
+            return { orderBy: 'RATING_AVERAGE', orderDirection: 'ASC' };
+          }
+          default: {
+            return { orderBy: 'CREATED_AT', orderDirection: 'DESC' };
+          }
+        }
+      };
+      const variables = {...findOrder(order), searchKeyword: searchValue, first};
+    const { data, loading, fetchMore, ...result } = useQuery(GET_REPOS, {variables,
         fetchPolicy: 'cache-and-network',
     });
-    useEffect(() => {
-        if (data) {
-            setRepositories(data.repositories.edges.map(edge => edge.node));
+    const handleFetchMore = () => {
+        const canFetchMore = !loading && data?.repositories.pageInfo.hasNextPage;
+    
+        if (!canFetchMore) {
+          return;
         }
-    }, [data]);
+    
+        fetchMore({
+          variables: {
+            after: data.repositories.pageInfo.endCursor,
+            ...variables,
+          },
+        });
+      };
 
-  return {repositories, loading, error};
+
+
+    return { repositories: data ? data.repositories : undefined, fetchMore: handleFetchMore, ...result };
 };
 
 export default useRepositories;

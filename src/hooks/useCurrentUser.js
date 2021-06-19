@@ -8,7 +8,6 @@ import { useState, useEffect } from 'react';
 
      useEffect(() => {
          if (data.data) {
-             console.log(data.data);
              setUser(data.data.authorizedUser);
          }
      }, [data]);

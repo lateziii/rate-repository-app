@@ -32,31 +32,22 @@ const SignInForm = ({ onSubmit }) => {
   return (
     <View style={styles.container}>
       <View style={styles.fieldContainer}>
-        <FormikTextInput name="username" placeholder="Username" />
+        <FormikTextInput testID="username" name="username" placeholder="Username" />
       </View>
       <View style={styles.fieldContainer}>
         <FormikTextInput
+        testID="password"
           name="password"
           placeholder="Password"
           secureTextEntry
         />
       </View>
-      <Button onPress={onSubmit}>Sign in</Button>
+      <Button testID="submit" onPress={onSubmit}>Sign in</Button>
     </View>
   );
 };
 
-const SignIn = () => {
-  const [signIn] = useSignIn();
-  const history = useHistory();
-
-  const onSubmit = async (values) => {
-    const { username, password } = values;
-    
-    await signIn({ username, password });
-    
-    history.push('/');
-  };
+const SignInContainer = ({onSubmit}) => {
 
   return (
     <Formik
@@ -69,4 +60,4 @@ const SignIn = () => {
   );
 };
 
-export default SignIn;
+export default SignInContainer;

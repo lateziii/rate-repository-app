@@ -6,6 +6,7 @@ import { useHistory } from 'react-router-native';
 
 import Button from './Button';
 import FormikTextInput from './FormikTextInput';
+import useSignUp from '../hooks/useSignUp';
 import useSignIn from '../hooks/useSignIn';
 
 const styles = StyleSheet.create({
@@ -21,14 +22,25 @@ const styles = StyleSheet.create({
 const initialValues = {
   username: '',
   password: '',
+  passwordConfirmation: ''
 };
 
 const validationSchema = yup.object().shape({
-  username: yup.string().required('Username is required'),
-  password: yup.string().required('Password is required'),
+  username: yup
+  .string().required('Username is required')
+  .min(1, '1-30 chars')
+  .max(30, '1-30 chars'),
+  password: yup.string().required('Password is required')
+  .min(1, '5-50 chars')
+  .max(30, '5-50 chars'),
+  passwordConfirmation: yup.string().required('Password must be confirmed')
+  .min(1, '5-50 chars')
+  .max(30, '5-50 chars')
+  .oneOf([yup.ref('password'), null], 'Password confirmation must match to password')
+
 });
 
-const SignInForm = ({ onSubmit }) => {
+const SignUpForm = ({ onSubmit }) => {
   return (
     <View style={styles.container}>
       <View style={styles.fieldContainer}>
@@ -41,19 +53,30 @@ const SignInForm = ({ onSubmit }) => {
           secureTextEntry
         />
       </View>
+      <View style={styles.fieldContainer}>
+        <FormikTextInput
+          name="passwordConfirmation"
+          placeholder="Password Confirmation"
+          secureTextEntry
+        />
+      </View>
       <Button onPress={onSubmit}>Sign in</Button>
     </View>
   );
 };
 
-const SignIn = () => {
+const SignUp = () => {
+  const [signUp] = useSignUp();
   const [signIn] = useSignIn();
   const history = useHistory();
 
   const onSubmit = async (values) => {
     const { username, password } = values;
     
-    await signIn({ username, password });
+    const response = await signUp({ username, password });
+    if(response.data) {
+        await signIn({ username, password });
+    }
     
     history.push('/');
   };
@@ -64,9 +87,9 @@ const SignIn = () => {
       onSubmit={onSubmit}
       validationSchema={validationSchema}
     >
-      {({ handleSubmit }) => <SignInForm onSubmit={handleSubmit} />}
+      {({ handleSubmit }) => <SignUpForm onSubmit={handleSubmit} />}
     </Formik>
   );
 };
 
-export default SignIn;
+export default SignUp;
